@@ -1,0 +1,8 @@
+__pycache__
+*.DS_Store
+*.dat
+*~
+*.png
+*.gif
+gym_lorenz.egg-info
+lorenz/
