@@ -22,18 +22,16 @@ class LorenzEnv(gym.Env):
         self.sigma      = 10.0
         self.rho        = 28.0
         self.beta       = 8.0/3.0
-        self.dt_act     = 1.5
-        self.dt         = 0.05
-        self.int_steps  = int(self.dt_act/self.dt)
+        self.dt_act     = 0.5
+        self.int_steps  = 50
+        self.dt         = self.dt_act/(self.int_steps - 1)
         self.act        = [-1.0, 0.0, 1.0]
         self.norm       = 100.0
-        self.t_max      = 50.0
-        self.hist_size  = 2
-        self.init_time  = 25.0
-        self.init_steps = math.floor(self.init_time/(self.dt_act))
+        self.t_max      = 15.0
+        self.init_time  = 5.0
+        self.init_steps = math.floor(self.init_time/self.dt_act)
         self.t0         =-self.init_time
         self.idx        =-1
-        self.rand_range = 30.0
 
         # Handle paths
         res_path   = 'lorenz'
@@ -48,7 +46,7 @@ class LorenzEnv(gym.Env):
         # Observation and action spaces
         self.observation_space = spaces.Box(low=-self.norm,
                                             high=self.norm,
-                                            shape=(3*self.hist_size,))
+                                            shape=(6,))
         self.action_space      = spaces.Discrete(len(self.act))
 
         # Reset env
@@ -61,9 +59,9 @@ class LorenzEnv(gym.Env):
         self.idx  += 1
 
         # Initial point
-        self.x0    = 1.0
-        self.y0    = 1.0
-        self.z0    = 1.0
+        self.x0    = 10.0
+        self.y0    = 15.0
+        self.z0    =-15.0
 
         # Init values and lists
         self.t     = self.t0
@@ -79,11 +77,11 @@ class LorenzEnv(gym.Env):
         self.vy    = 0.0
         self.vz    = 0.0
 
-        self.lst_t = [self.t0]
-        self.lst_x = [self.x0]
-        self.lst_y = [self.y0]
-        self.lst_z = [self.z0]
-        self.lst_a = [0]
+        self.lst_t = []
+        self.lst_x = []
+        self.lst_y = []
+        self.lst_z = []
+        self.lst_a = []
 
         # Run several steps before starting control
         for _ in range(self.init_steps):
@@ -112,7 +110,13 @@ class LorenzEnv(gym.Env):
                      (self.x, self.y, self.z), t,
                      args=(act, self.sigma, self.rho, self.beta))
 
-        for i in range(self.int_steps):
+        for i in range(0,self.int_steps-1):
+            self.lst_t.append(self.t)
+            self.lst_x.append(self.x)
+            self.lst_y.append(self.y)
+            self.lst_z.append(self.z)
+            self.lst_a.append(act)
+
             self.x_prv = self.x
             self.y_prv = self.y
             self.z_prv = self.z
@@ -120,13 +124,7 @@ class LorenzEnv(gym.Env):
             self.x  = float(f.T[0,i])
             self.y  = float(f.T[1,i])
             self.z  = float(f.T[2,i])
-            self.t += self.dt_act/(self.int_steps-1)
-
-            self.lst_t.append(self.t)
-            self.lst_x.append(self.x)
-            self.lst_y.append(self.y)
-            self.lst_z.append(self.z)
-            self.lst_a.append(act)
+            self.t += self.dt
 
             rwd += self.get_rwd(self.x_prv, self.x)
 
@@ -138,11 +136,16 @@ class LorenzEnv(gym.Env):
         # Get observation
         obs = self.get_obs()
 
-        # Check termination status
+        # Handle termination
         done = False
-        if (self.t >= self.t_max):
+        if (self.t+self.dt >= self.t_max):
             done = True
             self.dump(self.idx)
+            self.lst_t.append(self.t)
+            self.lst_x.append(self.x)
+            self.lst_y.append(self.y)
+            self.lst_z.append(self.z)
+            self.lst_a.append(act)
 
         return obs, rwd, done, None
 
