@@ -11,8 +11,8 @@ from   gym.utils       import seeding
 from   scipy.integrate import odeint
 
 ###############################################
-### Class attractor
-class LorenzEnv(gym.Env):
+### Generic class
+class Lorenz(gym.Env):
     metadata = {'render.modes': ['human']}
 
     # Initialize instance
@@ -22,12 +22,12 @@ class LorenzEnv(gym.Env):
         self.sigma      = 10.0
         self.rho        = 28.0
         self.beta       = 8.0/3.0
-        self.dt_act     = 0.5
+        self.dt_act     = 1.0
         self.int_steps  = 50
         self.dt         = self.dt_act/(self.int_steps - 1)
         self.act        = [-1.0, 0.0, 1.0]
         self.norm       = 100.0
-        self.t_max      = 15.0
+        self.t_max      = 25.0
         self.init_time  = 5.0
         self.init_steps = math.floor(self.init_time/self.dt_act)
         self.t0         =-self.init_time
@@ -152,7 +152,7 @@ class LorenzEnv(gym.Env):
     # Compute reward
     def get_rwd(self, x_prv, x):
 
-        rwd = 0.0 + (x_prv*x < 0.0)*1.0
+        rwd = 0.0
 
         return rwd
 

@@ -14,7 +14,7 @@ from gym_lorenz.envs.lorenz_env import *
 n_imgs = 300
 
 # Initialize attractor
-lorenz = LorenzEnv()
+lorenz = Lorenz()
 
 # Evolve attractor
 done = False
