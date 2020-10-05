@@ -55,3 +55,20 @@ The second environment aims at minimizing the number of sign changes of the x co
 <p align="center">
   <img width="800" alt="stabilizer_2D" src="https://user-images.githubusercontent.com/44053700/90248437-fc42ea00-de38-11ea-9d2a-ebf60eae53e7.png">
 </p>
+
+### ```gym_lorenz:lorenz-stabilizer-easy-v0```
+
+This is an easy version of the previous environment, using a dense reward instead of a sparse one. Reward is consistently 1 for each step with negative x, and consistently -1 for each step with positive x. The control-less environments has a reward of -151. Below is a sample of controlled vs uncontrolled environment, processed with an in-house PPO code. As can be seen, the control constrains the trajectory to remain mostly in the `x < 0` half-plane.
+
+<p align="center">
+  <img width="900" alt="oscillator_2D" src="https://user-images.githubusercontent.com/44053700/95064732-73418400-0700-11eb-86b4-261fc97a5ff0.png">
+</p>
+
+<p align="center">
+  <img width="300" alt="uncontrolled_3D" src="https://user-images.githubusercontent.com/44053700/90246972-f1d32100-de35-11ea-883f-7476d6082e4d.png"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img width="300" alt="controlled_3D" src="https://user-images.githubusercontent.com/44053700/95064866-9c621480-0700-11eb-8601-726351348446.png">
+</p>
+
+<p align="center">
+  <img width="800" alt="stabilizer_2D" src="https://user-images.githubusercontent.com/44053700/95064910-a5eb7c80-0700-11eb-9d75-dadddf405839.png">
+</p>

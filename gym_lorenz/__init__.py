@@ -9,3 +9,8 @@ register(
     id='lorenz-stabilizer-v0',
     entry_point='gym_lorenz.envs:LorenzStabilizer',
 )
+
+register(
+    id='lorenz-stabilizer-easy-v0',
+    entry_point='gym_lorenz.envs:LorenzStabilizerEasy',
+)
