@@ -110,7 +110,7 @@ class Lorenz(gym.Env):
                      (self.x, self.y, self.z), t,
                      args=(act, self.sigma, self.rho, self.beta))
 
-        for i in range(0,self.int_steps-1):
+        for i in range(1,self.int_steps-1):
             self.lst_t.append(self.t)
             self.lst_x.append(self.x)
             self.lst_y.append(self.y)
