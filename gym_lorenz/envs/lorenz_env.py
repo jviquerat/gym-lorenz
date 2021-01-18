@@ -19,6 +19,7 @@ class Lorenz(gym.Env):
     def __init__(self):
 
         # Main parameters
+        self.name       = 'lorenz'
         self.sigma      = 10.0
         self.rho        = 28.0
         self.beta       = 8.0/3.0
@@ -32,26 +33,26 @@ class Lorenz(gym.Env):
         self.init_steps = math.floor(self.init_time/self.dt_act)
         self.t0         =-self.init_time
 
+        # Other attributes
+        self.idx        =-1
+        self.cpu        = 0
+        self.n_cpu      = 1
+
         # Handle paths
-        res_path   = 'lorenz'
+        res_path   = self.name
         if (not os.path.exists(res_path)):
-            os.makedirs(res_path)
+            if (self.cpu == 0): os.makedirs(res_path)
         t         = time.localtime()
-        path_time = time.strftime("%H-%M-%S", t)
+        path_time = time.strftime("%H-%M", t)
         self.path = res_path+'/'+str(path_time)
         if (not os.path.exists(self.path)):
-            os.makedirs(self.path)
+            if (self.cpu == 0): os.makedirs(self.path)
 
         # Observation and action spaces
         self.observation_space = spaces.Box(low=-self.norm,
                                             high=self.norm,
                                             shape=(6,))
         self.action_space      = spaces.Discrete(len(self.act))
-
-        # Other attributes
-        self.idx        =-1
-        self.cpu        = 0
-        self.n_cpu      = 1
 
     # Reset variables
     def reset(self):
