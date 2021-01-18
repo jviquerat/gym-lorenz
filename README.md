@@ -20,8 +20,6 @@ There are two environments available, strongly inspired from <a href="https://re
 
 The control value can take only discrete values (-1, 0 and 1), and control is applied every unit of time (which is much coarser than what is presented in the reference above). The system is evolved from an initial condition for 5 units of time, after which control kicks in for 25 units of time.
 
-**Warning** : the environment currently works in parallel, but the ```lorenz_*.dat``` are not consistent when using multiple environments. Still, the environment can be learned using a single environment within less than 3 to 4 minutes on a modern laptop.
-
 ### ```gym_lorenz:lorenz-oscillator-v0```
 
 The first environment aims at maximizing the number of sign changes of the x component. Reward is consistently 0, except when x sign changes, in which case it is +1. The control-less environments has a reward of 14. Below is a sample of controlled vs uncontrolled environment, processed with an in-house PPO code. As can be seen, the control significantly increases the number of sign changes, while constraining the trajectory.
