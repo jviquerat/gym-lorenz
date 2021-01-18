@@ -31,7 +31,6 @@ class Lorenz(gym.Env):
         self.init_time  = 5.0
         self.init_steps = math.floor(self.init_time/self.dt_act)
         self.t0         =-self.init_time
-        self.idx        =-1
 
         # Handle paths
         res_path   = 'lorenz'
@@ -49,14 +48,16 @@ class Lorenz(gym.Env):
                                             shape=(6,))
         self.action_space      = spaces.Discrete(len(self.act))
 
-        # Reset env
-        self.reset()
+        # Other attributes
+        self.idx        =-1
+        self.cpu        = 0
+        self.n_cpu      = 1
 
     # Reset variables
     def reset(self):
 
         # Update index for output
-        self.idx  += 1
+        self.idx  += self.n_cpu
 
         # Initial point
         self.x0    = 10.0
