@@ -38,21 +38,31 @@ class Lorenz(gym.Env):
         self.cpu        = 0
         self.n_cpu      = 1
 
-        # Handle paths
-        res_path   = self.name
-        if (not os.path.exists(res_path)):
-            if (self.cpu == 0): os.makedirs(res_path)
-        t         = time.localtime()
-        path_time = time.strftime("%H-%M", t)
-        self.path = res_path+'/'+str(path_time)
-        if (not os.path.exists(self.path)):
-            if (self.cpu == 0): os.makedirs(self.path)
-
         # Observation and action spaces
         self.observation_space = spaces.Box(low=-self.norm,
                                             high=self.norm,
                                             shape=(6,))
         self.action_space      = spaces.Discrete(len(self.act))
+
+    # Set cpus and paths
+    def set_cpu(self, cpu, n_cpu):
+
+        # Set nb of cpus and index
+        self.cpu   = cpu
+        self.n_cpu = n_cpu
+        self.idx   =-cpu-1
+
+        # Handle paths
+        res_path = self.name
+        if (self.cpu == 0):
+            if (not os.path.exists(res_path)):
+                os.makedirs(res_path)
+        t         = time.localtime()
+        path_time = time.strftime("%H-%M-%S", t)
+        self.path = res_path+'/'+str(path_time)
+        if (self.cpu == 0):
+            if (not os.path.exists(self.path)):
+                os.makedirs(self.path)
 
     # Reset variables
     def reset(self):
